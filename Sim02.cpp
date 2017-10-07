@@ -1,16 +1,11 @@
 
 //header files
 #include <iostream>
-#include <fstream>
-#include <cstring>
-#include <stdlib.h>
 #include <vector>
-#include <queue>
-#include <pthread.h>
-#include <time.h>
-#include <sys/time.h>
 #include "data.h"
 #include "process.h"
+#include "readData.cpp"
+#include "simFuncs.cpp"
 
 using namespace std;
 
@@ -20,6 +15,9 @@ bool configFileValid( char string[] );
 //main driver implmentation
 int main( int argc, char* argv[] )
 {
+	configData cdata;
+	vector<metaData> mdata;
+	vector<process> pdata;
 	
 	if( argc != 2 )
 	{
@@ -33,13 +31,48 @@ int main( int argc, char* argv[] )
 		return 0;
 	} 
 
-	
+	if ( !getConfigData( argv[1], cdata ) )
+	{
+		return 0;
+	}
+
+	if( !getMetaData( cdata.filePath, mdata ) )
+	{
+		return 0;
+	}
+
+	//split data into processes
+	splitMetaData( pdata, mdata );
+
+	//output data to file and/or monitor
+	logData( cdata, pdata );
 
 	return 0;
 }
 
 
-
+/**
+ * @brief 
+ *
+ * @details 
+ *          
+ * @pre 
+ *
+ * @post 
+ *
+ * @par Algorithm 
+ *      
+ *      
+ * @exception None
+ *
+ * @param [in] 
+ *
+ * @param [out] 
+ *
+ * @return None
+ *
+ * @note None
+ */
 bool configFileValid( char string[] )
 {
 	int index = 0;

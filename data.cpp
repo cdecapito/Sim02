@@ -266,7 +266,9 @@ bool metaData::isDescriptorValid( configData cData )
  *
  * @note None
  */
-void metaData::getEndString( char string[], char process[], char memory[] )
+void metaData::getEndString( char string[],
+							 char process[],
+							 char memory[] )
 {
 	if ( metaCode == 'S' )
 	{
@@ -355,7 +357,8 @@ void metaData::getEndString( char string[], char process[], char memory[] )
  *
  * @note None
  */
-void metaData::getStartString( char string[], char process[] )
+void metaData::getStartString( char string[],
+							   char process[] )
 {
 	if ( metaCode == 'S' )
 	{
@@ -455,7 +458,8 @@ void metaData::getStartString( char string[], char process[] )
  *
  * @note None
  */
-bool metaData::errorCheck( char error[], configData cData )
+bool metaData::errorCheck( char error[],
+						   configData cData )
 {
 	bool dataValid;
 	char temp[ STR_LEN ];

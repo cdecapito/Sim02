@@ -70,9 +70,16 @@ class metaData
 
 		//member functions
 		bool isDescriptorValid( configData cData );
-		void getEndString( char string[], char process[], char memory[] );
-		void getStartString( char string[], char process[] );
-		bool errorCheck( char error[], configData cData );
+		
+		void getEndString( char string[],
+						   char process[],
+						   char memory[] );
+
+		void getStartString( char string[],
+							 char process[] );
+
+		bool errorCheck( char error[],
+					  	 configData cData );
 
 		//data members
 		char metaCode;

@@ -10,21 +10,52 @@
 //global constants
 static const int STR_LEN = 100;
 static const int STR_LEN_LNG = 400;
-static const int LOG_TO_BOTH = 0;
-static const int LOG_TO_FILE = 1;
-static const int LOG_TO_MONITOR = 2;
 
 //Function Definitions ////////////////////////////////////
-bool getConfigData( char filename[], configData &cdata );
-void removeSpace( char string [] );
+bool getConfigData( char filename[],
+					configData &cdata );
+
+void removeSpace( char string[] );
+
 bool isEmpty( char string[] );
-bool getMetaData( char filename[], vector<metaData> &mData );
-void parseString( char string[], vector<metaData> &mData );
-metaData parseData( int &index, char string[] );
+
+bool getMetaData( char filename[], 
+				  vector<metaData> &mData );
+
+void parseString( char string[],
+				  vector<metaData> &mData );
+
+metaData parseData( int &index, 
+					char string[] );
+
 bool logFileValid( char string[] );
 
 //Function Implementation /////////////////////////////////
-bool getConfigData( char filename[], configData &cdata )
+/**
+ * @brief getConfigData
+ *
+ * @details reads configuration data from file
+ *          
+ * @pre file exists
+ *
+ * @post file is read into system
+ *
+ * @par Algorithm 
+ *      Parse through file, read in data using file input
+ *      
+ * @exception None
+ *
+ * @param [in] filename provides name that pass passed 
+ *				through command line arguments
+ *
+ * @param [out] None
+ *
+ * @return bool if file was read, return true, otherwise false
+ *
+ * @note None
+ */
+bool getConfigData( char filename[], 
+					configData &cdata )
 {
 	ifstream fin;
 	char temp[ STR_LEN ];
@@ -289,6 +320,28 @@ bool getConfigData( char filename[], configData &cdata )
 	return true;
 }
 
+/**
+ * @brief removeSpace
+ *
+ * @details removes spaces at beginning of the string
+ *          
+ * @pre string exists
+ *
+ * @post spaces are removed from beginning
+ *
+ * @par Algorithm 
+ *      Traversing string
+ *      
+ * @exception None
+ *
+ * @param [in] string contains char of a line from file
+ *
+ * @param [out] none
+ *
+ * @return none
+ *
+ * @note None
+ */
 void removeSpace( char string [] )
 {
 	int index = 0;
@@ -304,6 +357,29 @@ void removeSpace( char string [] )
 		}
 	}
 }
+
+/**
+ * @brief isEmpty
+ *
+ * @details returns if a string is empty
+ *          
+ * @pre string exists
+ *
+ * @post if string is empty, return true, otherwise false
+ *
+ * @par Algorithm 
+ *      if, else statement with checking first element
+ *      
+ * @exception None
+ *
+ * @param [in] string provides array of char to check if empty
+ *
+ * @param [out] None
+ *
+ * @return bool: if string is empty, return false, otherwise true
+ *
+ * @note None
+ */
 bool isEmpty( char string[] )
 {
 	//if first element is null
@@ -315,7 +391,32 @@ bool isEmpty( char string[] )
 	//otherwise it is not empty
 	return false;
 }
-bool getMetaData( char filename[], vector<metaData> &mData )
+
+
+/**
+ * @brief getMetaData
+ *
+ * @details reads meta data from file and stores in class
+ *          
+ * @pre filename exists, mData has been created
+ *
+ * @post mData is set
+ *
+ * @par Algorithm 
+ *      use ifstream library function to read metadata
+ *      
+ * @exception None
+ *
+ * @param [in] filename provides string that contains metadata
+ *
+ * @param [out] mData provides metaData class vector
+ *
+ * @return bool, true if successful, false if not
+ *
+ * @note None
+ */
+bool getMetaData( char filename[],
+				  vector<metaData> &mData )
 {
 	//declare and initalize variables
 	char temp[ STR_LEN_LNG ];
@@ -354,7 +455,31 @@ bool getMetaData( char filename[], vector<metaData> &mData )
 
 	return true;
 }
-void parseString( char string[], vector<metaData> &mData )
+
+/**
+ * @brief parseString
+ *
+ * @details parses metaData line by line
+ *          
+ * @pre string exists and mData exists
+ *
+ * @post mData is set
+ *
+ * @par Algorithm 
+ *      parse through string
+ *      
+ * @exception None
+ *
+ * @param [in] string provides mData to parse
+ *
+ * @param [out] mData provides metaData
+ *
+ * @return None
+ *
+ * @note None
+ */
+void parseString( char string[], 
+				  vector<metaData> &mData )
 {
 	//initalize/declare variables
 	int index = 0;
@@ -371,7 +496,30 @@ void parseString( char string[], vector<metaData> &mData )
 	}
 }
 
-metaData parseData( int &index, char string[] )
+/**
+ * @brief parseData
+ *
+ * @details parses through the string and saves metaData
+ *          
+ * @pre string exists
+ *
+ * @post metadata is saved
+ *
+ * @par Algorithm 
+ *      increment index until find specific symbols
+ *      
+ * @exception None
+ *
+ * @param [in] string provides string read from file that is being parsed
+ *
+ * @param [out] index provides index in string that 
+ *
+ * @return metaData
+ *
+ * @note None
+ */
+metaData parseData( int &index, 
+					char string[] )
 {
 	//declare and initalize variables
 	char strTemp[ STR_LEN ];
@@ -479,6 +627,29 @@ metaData parseData( int &index, char string[] )
 	return metaTemp;
 }
 
+
+/**
+ * @brief 
+ *
+ * @details 
+ *          
+ * @pre 
+ *
+ * @post 
+ *
+ * @par Algorithm 
+ *      
+ *      
+ * @exception None
+ *
+ * @param [in] 
+ *
+ * @param [out] 
+ *
+ * @return None
+ *
+ * @note None
+ */
 bool logFileValid( char string[] )
 {
 	int index = 0;
