@@ -23,28 +23,11 @@
 using namespace std;
 
 
-//PCB class definition
-class PCB
+//PCB struct definition
+struct PCB
 {
-	static const int NEW = 0;
-	static const int READY = 1;
-	static const int RUNNING = 2;
-	static const int WAITING = 3;
-	static const int TERMINATED = 4;
-
-	public:
-		//constructor
-		PCB();
-		//destructor
-		~PCB();
-
-		//member functions
-		void setState( int newState );
-
-		//data members
-		int state;
+	int processState;
 };
-
 
 //process class definition
 class process

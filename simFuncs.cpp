@@ -7,7 +7,10 @@
   * 
   * @details splits meta data into processes and outputs data
   *
-  * @version 1.00 Carli DeCapito
+  * @version 1.01 Carli DeCapito
+  * 		 Timer Functionality ( 10/7/17 )
+  *
+  * 		 1.00 Carli DeCapito
   *		     Original Document (10/6/17)
   *
   * @note None
@@ -25,17 +28,9 @@
 #include <sys/time.h>
 #include "data.h"
 #include "process.h"
-#include "memoryFunctions.h"
+#include "MemoryFunction.h"
 
 using namespace std;
-
-// Global Constants
-static const int NEW = 0;
-static const int READY = 1;
-static const int RUNNING = 2;
-static const int WAITING = 3;
-static const int TERMINATED = 4;
-
 
 //function definitions
 void splitMetaData( vector<process> &pdata, 
@@ -72,29 +67,26 @@ void addDelay( double &time,
 
 int getWaitTime( timeval startTime );
 
-
-
-
 //function implementation /////////////////////////////////
 /**
- * @brief 
+ * @brief splitMetaData 
  *
- * @details 
+ * @details splits metaData into separate processes
  *          
- * @pre 
+ * @pre meta data must have a start(S & A) and end (A) to be a process
  *
- * @post 
+ * @post data is stored into vector
  *
  * @par Algorithm 
- *      
+ *      use for loop to get data
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] mdata provies vector of metadata
  *
- * @param [out] 
+ * @param [out] pdata provides vector of processes
  *
- * @return None
+ * @return Void
  *
  * @note None
  */
@@ -108,11 +100,11 @@ void splitMetaData( vector<process> &pdata,
 	int processIndex = 1;
 	int metaSize = mdata.size();
 
+	//for size of vector, push data into queue
 	for ( index = 0; index < metaSize; index++ )
 	{
-		//extract data and push onto
+		//extract data and push onto queue
 		tempMeta = mdata[ index ];
-
 		tempData.push( tempMeta );
 
 		//check if new process start or end
@@ -124,7 +116,7 @@ void splitMetaData( vector<process> &pdata,
 			{
 				pdata[ pdata.size() - 1 ].metadata.push( tempMeta );
 			}
-			//add new process
+			//do nothing since last process
 			if( tempMeta.metaCode == 'A' &&
 				strcmp( tempMeta.metaDescriptor, "end" ) == 0 )
 			{
@@ -145,24 +137,24 @@ void splitMetaData( vector<process> &pdata,
 }
 
 /**
- * @brief 
+ * @brief logData
  *
- * @details 
+ * @details outputs data to file/monitor/both
  *          
- * @pre 
+ * @pre processes and cdata must exist
  *
- * @post 
+ * @post data is log to designated spot
  *
  * @par Algorithm 
- *      
+ *      using checks, output data
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] cdata provides class of configuration data
  *
- * @param [out] 
+ * @param [in] pdata provides vector of proesses
  *
- * @return None
+ * @return Void
  *
  * @note None
  */
@@ -209,42 +201,52 @@ void logData( configData cdata,
 
 	for ( index = 0; index < processSize; index++ )
 	{
+		//change state to running
 		pdata[ index ].changeState( RUNNING );
 
+		//check that processing is valid
 		processingValid = logProcessingData( pdata[ index ], cdata, monitor, file, time, fout );
 
 		if ( !processingValid )
 		{
+			//close file if cannot process data
 			fout.close();
 			return;
 		}
+		//change state to terminated
 		pdata[ index ].changeState( TERMINATED );
-
-		/////log processing data here ///////////
 	}
 	fout.close();
 }
 
 
 /**
- * @brief 
+ * @brief logProcessingData
  *
- * @details 
+ * @details logs data for single process
  *          
- * @pre 
+ * @pre mdata must be in queue
  *
- * @post 
+ * @post data is logged
  *
  * @par Algorithm 
- *      
+ *      Loop until queue is empty
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [out] proc provides current process
  *
- * @param [out] 
+ * @param [in] cdata provides class of configuration data
  *
- * @return None
+ * @param [in] monitor provides bool if logging to monitor
+ *
+ * @param [in] file provides bool if logging to file
+ *
+ * @param [out] time provides total time of process
+ *
+ * @param [out] fout provides ofstream variable to output to file
+ *
+ * @return bool
  *
  * @note None
  */
@@ -263,76 +265,51 @@ bool logProcessingData( process &proc,
 	char errorStr[ STR_LEN ];
 	queue<metaData> mdata = proc.metadata;
 
+	//while no more metadata in queue
 	while( !mdata.empty() )
 	{
 		//get current metadata
 		currMetaData = mdata.front();
+		//pop it off the queue
 		mdata.pop();
 
-		//check that the data is valid
+		//check that the current metadata is valid
 		dataValid = currMetaData.errorCheck( errorStr, cdata );
 
+		//check that metadata is valid
 		if( dataValid )
 		{
+			//get start string
 			check = getStartString( currMetaData, startStr, time, proc );
 
+			//output to monitor
 			if( monitor ) 
 			{
 				cout << startStr << endl;
-				/*
-				if ( currMetaData.metaCode == 'S' )
-				{
-					if( proc.processNum == 1 )
-					{
-						cout << startStr << endl;
-					}
-					else if ( strcmp( currMetaData.metaDescriptor, "end" ) == 0 )
-					{
-						cout << startStr << endl;
-					}
-				}
-				else
-				{
-					cout << startStr << endl;
-				}
-				*/
 			}
+			//output to file
 			if( file )
 			{
 				fout << startStr << endl;
-				/*
-				if( currMetaData.metaCode == 'S' )
-				{
-					if( proc.processNum == 1 )
-					{
-						fout << startStr << endl;
-					}
-					else if ( strcmp( currMetaData.metaDescriptor, "end" ) == 0 )
-					{
-						fout << startStr << endl;
-					}
-				}
-				else
-				{
-					fout << startStr << endl;
-				}
-				*/
 			}
+			//if could get start string. then get end string
 			if ( check )
 			{
 				getEndString( currMetaData, endStr, time, proc, cdata );
 
+				//output to monitor
 				if ( monitor )
 				{
 					cout << endStr << endl;
 				}
+				//output to file
 				if ( file )
 				{
 					fout << endStr << endl;
 				}
-				
 			}
 		}
+		//else error occured
 		else 
 		{
 			cout << errorStr << endl;
@@ -344,24 +321,28 @@ bool logProcessingData( process &proc,
 
 
 /**
- * @brief 
+ * @brief getStartString
  *
- * @details 
+ * @details returns starting string of output
  *          
- * @pre 
+ * @pre cdata and mdata must be valid
  *
- * @post 
+ * @post string is passed by reference to print
  *
  * @par Algorithm 
- *      
+ *      Does checks and function calls
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] mdata provides metaData
  *
- * @param [out] 
+ * @param [in] string provides cstring to output
  *
- * @return None
+ * @param [out] time provides total time to output
+ *
+ * @param [out] proc provides process class obj
+ *
+ * @return bool
  *
  * @note None
  */
@@ -430,22 +411,28 @@ bool getStartString( metaData mdata,
 
 
 /**
- * @brief 
+ * @brief getEndString
  *
- * @details 
+ * @details gets string to output to file/monitor
  *          
- * @pre 
+ * @pre cdata must be valid and startstring must have outputed
  *
- * @post 
+ * @post string is passed by reference to output
  *
  * @par Algorithm 
- *      
+ *      completes various checks and calls to get appropriate string
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] mdata provides metaData obj
  *
- * @param [out] 
+ * @param [in] string provides cstring to output
+ *
+ * @param [out] time provides total time elapsed for process
+ *
+ * @param [out] proc provides process class obj
+ *
+ * @param [in] cdata provides configuration data obj
  *
  * @return None
  *
@@ -478,6 +465,7 @@ void getEndString( metaData mdata,
 		strcat( string, ": " );
 
 	}
+	//allocate in memory
 	if( mdata.metaCode == 'M' )
 	{
 		//memory allocation
@@ -490,22 +478,23 @@ void getEndString( metaData mdata,
 }
 
 /**
- * @brief 
+ * @brief timer
  *
- * @details 
+ * @details waits for amount of time requested, and updates total time
  *          
- * @pre 
+ * @pre timeInterval must be nonnegative
  *
- * @post 
+ * @post time is passed and then time total updated to output
  *
  * @par Algorithm 
- *      
+ *      Use sys/time.h timeval structure
+ * 		Use while loop until pass time. 
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] timeInterval provides int with requested time to wait
  *
- * @param [out] 
+ * @param [out] time provides double of total time to output
  *
  * @return None
  *
@@ -521,10 +510,13 @@ void timer( double &time,
 	//get current time
 	gettimeofday( &startTime, NULL );
 
+	//wait until allotted time has passed
 	while( getWaitTime( startTime ) < timeInterval );
 
+	//get time after passing time
 	gettimeofday( &endTime, NULL );
 
+	//calculate time elapsed
 	//time in secs and usecs
 	secs = endTime.tv_sec - startTime.tv_sec;
 	usecs = endTime.tv_usec - startTime.tv_usec;
@@ -537,35 +529,35 @@ void timer( double &time,
 		//take one sec away from secs
 		secs -= 1;
 	}
+	//if usecs is greater than 1 sec, convert to 1 sec
 	if( usecs > 999999 )
 	{
 		secs += 1;
 		usecs -= 1000000;
 	}
 
+	//convert into double
 	tempTime = ( double ) usecs / 1000 / 1000;
 	time = time + ( double ) secs + tempTime; 
 }
 
 /**
- * @brief 
+ * @brief runner
  *
- * @details 
+ * @details runner function to wait for thread creation
  *          
- * @pre 
+ * @pre param is time to elapse
  *
- * @post 
+ * @post param is updated with time in usecs
  *
  * @par Algorithm 
- *      
+ *      use timeval from sys/time.h library
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] param provides int ptr with time to wait/ returns microsecs
  *
- * @param [out] 
- *
- * @return None
+ * @return Void*
  *
  * @note None
  */
@@ -581,9 +573,7 @@ void* runner( void *param )
 	gettimeofday( &endTime, NULL );
 
 	secs = endTime.tv_sec - startTime.tv_sec;
-
 	usecs = endTime.tv_usec - startTime.tv_usec;
-
 
 	if ( usecs < 0 )
 	{
@@ -609,24 +599,24 @@ void* runner( void *param )
 
 
 /**
- * @brief 
+ * @brief addDelay
  *
- * @details 
+ * @details adds delay from thread to total time
  *          
- * @pre 
+ * @pre threadTime contains time thread elapsed
  *
- * @post 
+ * @post time is updated
  *
  * @par Algorithm 
- *      
+ *      increment time with time of thread
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] threadTime provides integer value returned from runner
  *
- * @param [out] 
+ * @param [out] time provides int value of total time
  *
- * @return None
+ * @return Void
  *
  * @note None
  */
@@ -640,20 +630,20 @@ void addDelay( double &time,
 
 
 /**
- * @brief 
+ * @brief getWaitTime
  *
- * @details 
+ * @details helper functions that gets time to wait
  *          
- * @pre 
+ * @pre startTime must be valid
  *
- * @post 
+ * @post return time to elapse
  *
  * @par Algorithm 
- *      
+ *      use timeval from sys/time.h
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] startTime provides timeval of start time
  *
  * @param [out] 
  *
@@ -666,6 +656,7 @@ int getWaitTime( timeval startTime )
 	timeval time;
 	int usecs, secs;
 
+	//get current time
 	gettimeofday( &time, NULL );
 
 	//extract secs and microsecs

@@ -15,98 +15,18 @@
 #ifndef PROCESS_CPP
 #define PROCESS_CPP
 
+//constants
+static const int NEW = 0;
+static const int READY = 1;
+static const int RUNNING = 2;
+static const int WAITING = 3;
+static const int TERMINATED = 4;
+
 //header files
 #include "process.h"
 #include <iostream>
 
 using namespace std;
-
-
-//PCB Implementation //////////////////////////////////////
-/**
- * @brief constructor for PCB
- *
- * @details intializes PCB
- *          
- * @pre None
- *
- * @post None
- *
- * @par Algorithm 
- *      None
- *      
- * @exception None
- *
- * @param [in] none
- *
- * @param [out] none
- *
- * @return None
- *
- * @note None
- */
-PCB::PCB()
-{
-	//nothing
-}
-
-
-/**
- * @brief destructor
- *
- * @details resets PCB members
- *          
- * @pre None
- *
- * @post None
- *
- * @par Algorithm 
- *      None
- *      
- * @exception None
- *
- * @param [in] None
- *
- * @param [out] None
- *
- * @return None
- *
- * @note None
- */
- 
-PCB::~PCB()
-{
-	//nothing
-}
-
-/**
- * @brief setState
- *
- * @details sets new state
- *          
- * @pre none
- *
- * @post state is assigned
- *
- * @par Algorithm 
- *      None
- *      
- * @exception None
- *
- * @param [in] newState provides int value of new state
- *
- * @param [out] None
- *
- * @return None
- *
- * @note None
- */
-
-void PCB::setState( int newState )
-{
-	state = newState;
-}
-
 
 //process implementation///////////////////////////////////
 /**
@@ -133,7 +53,7 @@ void PCB::setState( int newState )
  */
 process::process()
 {
-	pcb.setState( 0 );
+	pcb.processState = NEW;
 }
 
 /**
@@ -161,7 +81,7 @@ process::process()
  
 process::~process()
 {
-	pcb.setState( 4 );
+	pcb.processState = TERMINATED;
 }
 
 
@@ -189,7 +109,7 @@ process::~process()
  */
 void process::changeState( int state )
 {
-	pcb.setState( state );
+	pcb.processState  = state;
 }
 
 

@@ -20,6 +20,7 @@
 #define DATA_H
 
 //header files
+#include <iostream>
 #include <vector>
 
 using namespace std;
@@ -70,7 +71,7 @@ class metaData
 
 		//member functions
 		bool isDescriptorValid( configData cData );
-		
+
 		void getEndString( char string[],
 						   char process[],
 						   char memory[] );

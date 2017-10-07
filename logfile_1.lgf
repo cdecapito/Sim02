@@ -2,32 +2,32 @@
 0.000004 - OS: preparing process 1
 0.000007 - OS: starting process 1
 0.000007 - Process 1: start processing action
-0.134502 - Process 1: end processing action
-0.134502 - Process 1: allocating memory
-0.187275 - Process 1: memory allocated at 0x274
-0.187275 - Process 1: start monitor output
-0.397277 - Process 1: end monitor output
-0.397277 - Process 1: start hard drive input
-0.544671 - Process 1: end hard drive input
-0.544671 - Process 1: start printer output
-5.544673 - Process 1: end printer output
-5.544673 - Process 1: start processing action
-5.622966 - Process 1: end processing action
-5.622966 - Process 1: start printer output
-6.622968 - Process 1: end printer output
-6.622968 - Process 1: start memory blocking
-6.772970 - Process 1: end memory blocking
-6.772970 - Process 1: start keyboard input
-6.857971 - Process 1: end keyboard input
-6.857971 - Process 1: start memory blocking
-6.958478 - Process 1: end memory blocking
-6.958478 - Process 1: start processing action
-7.018480 - Process 1: end processing action
-7.018480 - Process 1: start processing action
-7.078482 - Process 1: end processing action
-7.078482 - Process 1: start hard drive ouptut
-7.194245 - Process 1: end hard drive input
-7.194245 - Process 1: start processing action
-7.410247 - Process 1: end processing action
-7.410247 - OS: removing process 1
-7.410250 - Simulator program ending
+0.132333 - Process 1: end processing action
+0.132333 - Process 1: allocating memory
+0.182334 - Process 1: memory allocated at 0x174
+0.182334 - Process 1: start monitor output
+0.392336 - Process 1: end monitor output
+0.392336 - Process 1: start hard drive input
+0.538504 - Process 1: end hard drive input
+0.538504 - Process 1: start printer output
+5.538505 - Process 1: end printer output
+5.538505 - Process 1: start processing action
+5.612194 - Process 1: end processing action
+5.612194 - Process 1: start printer output
+6.612195 - Process 1: end printer output
+6.612195 - Process 1: start memory blocking
+6.762196 - Process 1: end memory blocking
+6.762196 - Process 1: start keyboard input
+6.851776 - Process 1: end keyboard input
+6.851776 - Process 1: start memory blocking
+6.956650 - Process 1: end memory blocking
+6.956650 - Process 1: start processing action
+7.019137 - Process 1: end processing action
+7.019137 - Process 1: start processing action
+7.079140 - Process 1: end processing action
+7.079140 - Process 1: start hard drive ouptut
+7.189286 - Process 1: end hard drive input
+7.189286 - Process 1: start processing action
+7.412968 - Process 1: end processing action
+7.412968 - OS: removing process 1
+7.412971 - Simulator program ending

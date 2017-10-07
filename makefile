@@ -3,10 +3,10 @@ DEBUG = -g
 CFLAGS = -Wall -c $(DEBUG)
 LFLAGS = -Wall $(DEBUG)
 
-Sim02 : Sim02.o data.o process.o memoryFunctions.o
-	$(CC) $(LFLAGS) Sim02.o data.o process.o memoryFunctions.o -pthread -o Sim02
+Sim02 : Sim02.o data.o process.o MemoryFunction.o
+	$(CC) $(LFLAGS) Sim02.o data.o process.o MemoryFunction.o -pthread -o Sim02
 
-Sim02.o : Sim02.cpp data.cpp process.cpp readData.cpp simFuncs.cpp memoryFunctions.c
+Sim02.o : Sim02.cpp data.cpp process.cpp readData.cpp simFuncs.cpp MemoryFunction.c
 	$(CC) $(CFLAGS) Sim02.cpp 
 
 data.o : data.cpp data.h
@@ -15,8 +15,8 @@ data.o : data.cpp data.h
 process.o: process.cpp process.h
 	$(CC) $(CFLAGS) process.cpp
 
-memoryFunctions.o: memoryFunctions.c memoryFunctions.h
-	$(CC) $(CFLAGS) memoryFunctions.c
+MemoryFunction.o: MemoryFunction.c MemoryFunction.h
+	$(CC) $(CFLAGS) MemoryFunction.c
 
 clean: 
 	\rm *.o Sim02

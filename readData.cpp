@@ -1,3 +1,17 @@
+// Program Information /////////////////////////////////////////////////////////
+/**
+  * @file readData.cpp
+  *
+  * @brief implements functions that read data in     
+  * 
+  * @details reads in configData and metaData
+  *
+  * @version 1.00 Carli DeCapito
+  *			 Original ( 9/12/17 )
+  *
+  * @note None
+  */
+//header file
 #include <iostream>
 #include <fstream>
 #include <cstring>
@@ -5,7 +19,6 @@
 #include <vector>
 #include <queue>
 #include "data.h"
-//#include "process.h"
 
 //global constants
 static const int STR_LEN = 100;
@@ -270,6 +283,7 @@ bool getConfigData( char filename[],
 				strcpy( cdata.logFilePath, temp );
 			}
 		}
+		//check if kbytes,Mbytes, Gbytes
 		else if ( strcmp( temp, "System memory (kbytes)" ) == 0 )
 		{
 			fin.getline( temp, STR_LEN, '\n' );
@@ -307,7 +321,7 @@ bool getConfigData( char filename[],
 				cdata.sysMemory = tempInt;
 			}
 		}
-		else 	//end of file
+		else //end of file
 		{
 			if ( strcmp( temp, "End Simulator Configuration File\n") == 0 )
 			{
@@ -629,24 +643,24 @@ metaData parseData( int &index,
 
 
 /**
- * @brief 
+ * @brief logFileValid
  *
- * @details 
+ * @details checks that log file has extension .mdf
  *          
- * @pre 
+ * @pre string exists
  *
- * @post 
+ * @post returns true if extensions is .mdf, otherwise false
  *
  * @par Algorithm 
- *      
+ *      check through string, checking for 3 consecutive mdf
  *      
  * @exception None
  *
- * @param [in] 
+ * @param [in] string provides string for file name
  *
  * @param [out] 
  *
- * @return None
+ * @return bool
  *
  * @note None
  */
